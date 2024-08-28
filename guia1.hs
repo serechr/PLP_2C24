@@ -10,3 +10,9 @@ max2' x y = if x > y then x else y
 normaVectorial (x, y) = sqrt (x^2 + y^2)
 
 normaVectorial' x y = sqrt (x^2 + y^2)
+
+subtract = flip (-)
+
+predecesor = subtract 1
+
+evaluarEnCero = \f -> f 0
