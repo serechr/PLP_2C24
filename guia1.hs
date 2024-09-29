@@ -23,7 +23,6 @@ curry' f x y = f (x,y)
 
 uncurry' f (x,y) = f x y
 
-
 -- Ejercicio 3
 
 -- Redefinir usando foldr las funciones sum, elem, (++), filter y map
@@ -50,7 +49,6 @@ mejorSegun' p xs = foldr1 (\x acc -> if (p x acc) then x else acc)
 -- Definir sumasParciales
 
 -- sumasParciales :: [a] -> [a]
--- sumasParciales [] = []
 sumasParciales xs = reverse (snd (foldl (\(suma, acc) x -> (x + suma, (x + suma) : acc) ) (0,[]) xs))
 
 -- Definir sumaAlt
@@ -62,7 +60,6 @@ sumaAlt' xs = fst (foldr(\n (res,i) -> (if even i then res + n else res - n, i +
 -- Definir sumaAlt2 (lo mismo pero al revés)
 
 sumaAlt2 xs = fst (foldr (\n (res,i) -> (if even i then res + n else res - n, i + 1)) (0,0) xs)
-
 
 -- Ejerecicio 4
 
@@ -110,7 +107,7 @@ elementosEnPosicionesPares' xs = fst (foldr (\x (acc, i) -> (if even i then x : 
 entrelazar [] = id
 entrelazar (x:xs) = \ys -> if null ys then x : entrelazar xs [] else x : head ys : entrelazar xs (tail ys)
 
-    {- no es estructural debido a que aplica la recursión usando otra función que toma la segunda lista, 
+{- no es estructural debido a que aplica la recursión usando otra función que toma la segunda lista, 
     en vez de aplicarla directamente sobre la cola de la primer lista. Usa cosas de recursión estructural 
     pero al combinar dos listas deja de serlo -}
 
@@ -129,9 +126,8 @@ sacarUna' n xs = foldr (\x acc -> if x /= n then x : acc else acc) [] xs
 {-  foldr no es adecuado ya que recorre la lista de derecha a izquierda 
     y lo que queremos nosotros es sacar la primer aparición de n en la 
     lista, ese problema lo podríamos resolver usando reverse. Sin embargo, 
-    al recorrer toda la lista sacaríamos todas sus aparaiciones sin poder 
-    detenernos una vez que encontramos al elemento la primera vez.
--}
+    al recorrer toda la lista sacaríamos todas sus apariciones sin poder 
+    detenernos una vez que encontramos al elemento la primera vez. -}
 
 insertarOrdenado n [] = [n]
 insertarOrdenado n (x:xs) = if (n > x) then x : insertarOrdenado n xs else n : x : xs
@@ -163,6 +159,38 @@ mapDoble f xs ys = mapPares' f (armarPares xs ys) -- B)
 
 -- Ejercicio 9
 
-sumaMat xs ys = zipWith (zipWith (+)) xs ys -- repasar, ver por qué a veces no ponen los argumentos en el lado derecho
+matriz1 = [[1,2,3],[4,5,6],[7,8,9]]
 
+sumaMat xs ys = zipWith (zipWith (+)) xs ys -- repasar
 
+-- repasar, resolver usando foldl
+
+trasponer' [] = []
+trasponer' (x:xs) = head(x) : trasponer' xs
+
+sacarPrimero xs = [map (drop i) xs | i <- [0.. (length xs - 1)]]
+
+trasponer xs = map (trasponer') (sacarPrimero xs)
+
+-- Ejercicio 10 
+
+foldNat f base 0 = base
+foldNat f base n = n f (foldNat f base (n - 1))
+
+potencia' n 0 = 1
+potencia' n e = n * potencia' n (e-1)
+
+potencia n e = foldNat (\_ acc -> n * acc) 1 e -- repasar, ta mal :(
+
+-- Ejercicio 11
+
+unoxuno xs = map (\x -> [x]) xs
+
+sufijos [] = []
+-- sufijos xs = [drop i xs | i <- [0.. length xs]]
+sufijos xs = foldr (\x acc -> [[x] ++ head acc]) [""] xs
+
+-- sufijos' [] = [[]]
+-- sufijos' xs = xs : sufijos (tail xs)
+
+-- roseEjemplo = Rose 1 [Rose 2 [], Rose 3 [Rose 6 []], Rose 4 [Rose 5 []]]
