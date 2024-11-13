@@ -63,6 +63,29 @@ permutacion([X],[X]).
 permutacion([H|T],L) :- member(H,L), permutacion(T,L1), borrar1(L,H,L1).
 
 
+%% FUNCIONES PARA EL TP %%
+% borrar(+ListaOriginal, +X, -ListaSinXs)
+borrar([],_,[]).
+borrar([X|T],X,L) :- borrar(T,X,L).
+borrar([Y|T],X,[Y|L]) :- X \= Y, borrar(T,X,L).
+
+% sacarDuplicados(+L1, -L2)
+sacarDuplicados([],[]).
+sacarDuplicados([X|T],L) :- sacarDuplicados(T,Ts), borrar(Ts,X,Ls),append([X],Ls,L).
+
+% partir(+N,?L,?L1,?L2)
+partir(0,L,[],L).
+partir(N,L,L1,L2) :- N>0, N1 is N-1, partir(N1,L,L3,[H|L2]), append(L3,[H],L1).
+
+% entre(+I,+S,-V)
+entre(X,Y,X) :- X =< Y.
+entre(X,Y,Z) :- X =< Y, X1 is X+1, entre(X1,Y,Z).
+
+% long(+XS,-L)
+long([],0).
+long([_|T],L) :- long(T,L1), L is L1+1.
+
+
 
 
 
